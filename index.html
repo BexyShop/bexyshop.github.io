@@ -1,35 +1,505 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
     <meta charset="utf-8">
-    <title>BEXY TV</title>
-</head>
-<body style="background:#040711; color:#fff; display:flex; align-items:center; justify-content:center; height:100vh; margin:0; font-family:sans-serif;">
-    <div style="text-align:center;">
-        <div style="border:4px solid rgba(255,255,255,0.1); border-top:4px solid #f59e0b; border-radius:50%; width:50px; height:50px; animation:spin 1s linear infinite; margin:0 auto 20px;"></div>
-        <p style="font-weight:bold; font-size:18px;">Lancement BEXY TV...</p>
-    </div>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BEXY TV — Expérience Cinéma 4K & Box Android</title>
     <!-- FOR ANDROID APK COMPATIBILITY: url=https://exp-fossil-runtime-analyses.trycloudflare.com -->
-    <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Palette True Black & Surfaces */
+            --true-black: #000000;
+            --surface-dark: #080808;
+            --surface-card: #0c0c0c;
+            --surface-hover: #141414;
+            --surface-elevated: #1a1a1a;
+            
+            /* Bordures semi-transparentes ultra-propres */
+            --border-subtle: 1px solid rgba(255, 255, 255, 0.08);
+            --border-hover: 1px solid rgba(255, 255, 255, 0.18);
+            --border-recommended: 1px solid rgba(6, 182, 212, 0.5);
+
+            /* Accents */
+            --cyan-accent: #06b6d4;
+            --cyan-glow: rgba(6, 182, 212, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+
+            /* Emil Kowalski Standards : Custom Springs & Easings */
+            --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+            --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+            --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+            --duration-fast: 160ms;
+            --duration-normal: 220ms;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        body {
+            background-color: var(--true-black);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Navbar avec True Black & Frosted Blur */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 40px;
+            border-bottom: var(--border-subtle);
+            background: rgba(0, 0, 0, 0.82);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+        }
+        .logo {
+            font-size: 22px;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .logo span {
+            color: var(--cyan-accent);
+        }
+        
+        /* Boutons avec Micro-Compressions Emil Kowalski */
+        .nav-btn {
+            background: var(--text-primary);
+            color: var(--true-black);
+            padding: 9px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 13px;
+            letter-spacing: -0.2px;
+            border: 1px solid transparent;
+            transition: transform var(--duration-fast) var(--ease-out), opacity var(--duration-fast) ease;
+            will-change: transform;
+        }
+        .nav-btn:active {
+            transform: scale(0.965);
+        }
+        @media (hover: hover) and (pointer: fine) {
+            .nav-btn:hover {
+                opacity: 0.92;
+            }
+        }
+
+        /* Hero */
+        .hero {
+            padding: 160px 20px 100px;
+            text-align: center;
+            background: radial-gradient(circle at 50% -10%, rgba(20, 20, 20, 0.8), var(--true-black) 70%);
+            position: relative;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.04);
+            border: var(--border-subtle);
+            color: var(--cyan-accent);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 28px;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            transition: border-color var(--duration-fast) ease;
+        }
+        .hero-badge-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--cyan-accent);
+            box-shadow: 0 0 8px var(--cyan-accent);
+        }
+        .hero h1 {
+            font-size: 58px;
+            font-weight: 800;
+            line-height: 1.08;
+            margin-bottom: 24px;
+            letter-spacing: -2px;
+            color: #ffffff;
+        }
+        .hero p {
+            font-size: 19px;
+            color: var(--text-secondary);
+            max-width: 620px;
+            margin: 0 auto 40px;
+            font-weight: 400;
+            line-height: 1.6;
+        }
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--cyan-accent);
+            color: var(--true-black);
+            padding: 15px 34px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            letter-spacing: -0.3px;
+            box-shadow: 0 0 24px var(--cyan-glow);
+            transition: transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-normal) var(--ease-out);
+            will-change: transform;
+        }
+        .btn-primary:active {
+            transform: scale(0.965);
+        }
+        @media (hover: hover) and (pointer: fine) {
+            .btn-primary:hover {
+                box-shadow: 0 0 36px var(--cyan-glow);
+                transform: translateY(-2px);
+            }
+        }
+
+        /* Features */
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 36px;
+            padding: 40px 20px;
+            flex-wrap: wrap;
+        }
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .feature-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(6, 182, 212, 0.15);
+            border: 1px solid rgba(6, 182, 212, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--cyan-accent);
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        /* Pricing Section */
+        .pricing {
+            padding: 90px 20px 130px;
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+        .pricing-title {
+            text-align: center;
+            font-size: 34px;
+            font-weight: 800;
+            margin-bottom: 50px;
+            letter-spacing: -1.2px;
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 22px;
+            align-items: stretch;
+        }
+
+        /* Plan Card avec Hiérarchie True Black et Spring Feedback */
+        .plan-card {
+            background: var(--surface-card);
+            border: var(--border-subtle);
+            border-radius: 14px;
+            padding: 36px 28px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: transform var(--duration-fast) var(--ease-out), border-color var(--duration-normal) ease, box-shadow var(--duration-normal) ease;
+            will-change: transform;
+        }
+        .plan-card:active {
+            transform: scale(0.985);
+        }
+        @media (hover: hover) and (pointer: fine) {
+            .plan-card:hover {
+                transform: translateY(-4px);
+                border-color: rgba(255, 255, 255, 0.16);
+            }
+        }
+        .plan-card.recommended {
+            border: var(--border-recommended);
+            background: linear-gradient(180deg, rgba(6, 182, 212, 0.04) 0%, var(--surface-card) 40%);
+            box-shadow: 0 0 40px rgba(6, 182, 212, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+        @media (hover: hover) and (pointer: fine) {
+            .plan-card.recommended:hover {
+                border-color: rgba(6, 182, 212, 0.8);
+                box-shadow: 0 0 50px rgba(6, 182, 212, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            }
+        }
+        .recommended-badge {
+            position: absolute;
+            top: -11px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--cyan-accent);
+            color: var(--true-black);
+            padding: 3px 14px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            box-shadow: 0 2px 10px rgba(6, 182, 212, 0.4);
+        }
+        .plan-name {
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+        .plan-price {
+            font-size: 46px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+            color: #ffffff;
+            line-height: 1;
+        }
+        .plan-price span {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-muted);
+            letter-spacing: 0;
+            margin-left: 2px;
+        }
+        .plan-desc {
+            color: var(--text-secondary);
+            margin-bottom: 28px;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 42px;
+        }
+        
+        .plan-features {
+            list-style: none;
+            margin-bottom: 36px;
+            flex-grow: 1;
+        }
+        .plan-features li {
+            margin-bottom: 11px;
+            font-size: 14px;
+            color: #d4d4d8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .plan-features li::before {
+            content: "✓";
+            color: var(--cyan-accent);
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        /* Bouton d'Achat avec Micro-Compression & Feedback Non-Intrusif */
+        .btn-buy {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            text-align: center;
+            background: var(--surface-hover);
+            color: var(--text-primary);
+            padding: 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: -0.2px;
+            border: var(--border-subtle);
+            cursor: pointer;
+            outline: none;
+            transition: transform var(--duration-fast) var(--ease-out), background-color var(--duration-fast) ease, border-color var(--duration-fast) ease, opacity var(--duration-fast) ease;
+            will-change: transform;
+        }
+        .btn-buy:active {
+            transform: scale(0.965);
+        }
+        @media (hover: hover) and (pointer: fine) {
+            .btn-buy:hover {
+                background: #1c1c1c;
+                border-color: rgba(255, 255, 255, 0.16);
+            }
+        }
+        .plan-card.recommended .btn-buy {
+            background: var(--text-primary);
+            color: var(--true-black);
+            border-color: transparent;
+        }
+        @media (hover: hover) and (pointer: fine) {
+            .plan-card.recommended .btn-buy:hover {
+                opacity: 0.92;
+                background: #ffffff;
+            }
+        }
+
+        /* Feedback de Chargement Subtil Emil Kowalski (Fast Spinner, No Jitter) */
+        .btn-buy.is-loading {
+            pointer-events: none;
+            opacity: 0.88;
+            filter: blur(0.3px);
+        }
+        .spinner-inline {
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            border-top-color: currentColor;
+            border-radius: 50%;
+            animation: spin 500ms linear infinite;
+        }
+        .plan-card.recommended .btn-buy .spinner-inline {
+            border: 2px solid rgba(0, 0, 0, 0.25);
+            border-top-color: #000000;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Accessibilité : Respect de prefers-reduced-motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, .plan-card, .btn-buy, .btn-primary, .nav-btn {
+                transition: opacity 120ms ease !important;
+                transform: none !important;
+                animation-duration: 0.01ms !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar { padding: 16px 20px; }
+            .hero { padding: 130px 16px 80px; }
+            .hero h1 { font-size: 38px; }
+            .pricing-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">BEXY<span>TV</span></div>
+        <a href="#tarifs" class="nav-btn">Découvrir les offres</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            L'expérience Ultime
+        </div>
+        <h1>Le Cinéma 4K<br>dans votre salon.</h1>
+        <p>BEXY TV transforme votre téléviseur avec une application sur-mesure. Zapping instantané, sans coupure, et interface True Black immersive.</p>
+        <a href="#tarifs" class="btn-primary">Choisir mon accès</a>
+        
+        <div class="features">
+            <div class="feature-item"><div class="feature-icon">✓</div> Stabilité Serveur 24/7</div>
+            <div class="feature-item"><div class="feature-icon">✓</div> Zapping &lt; 0.3s</div>
+            <div class="feature-item"><div class="feature-icon">✓</div> 46 000+ Chaînes &amp; VOD</div>
+            <div class="feature-item"><div class="feature-icon">✓</div> Support Réactif 7j/7</div>
+        </div>
+    </section>
+
+    <section class="pricing" id="tarifs">
+        <h2 class="pricing-title">Accès Privé &amp; Exclusif</h2>
+        
+        <div class="pricing-grid">
+            <!-- 1 Mois -->
+            <div class="plan-card">
+                <div class="plan-name">Test / 1 Mois</div>
+                <div class="plan-price">5€ <span>/mois</span></div>
+                <div class="plan-desc">Idéal pour tester la qualité et la stabilité sans engagement.</div>
+                <ul class="plan-features">
+                    <li>Accès Complet 30 Jours</li>
+                    <li>Qualité 4K / UHD</li>
+                    <li>Téléchargement APK inclus</li>
+                    <li>Support standard</li>
+                </ul>
+                <button type="button" onclick="redirectToCheckout('month_1', this)" class="btn-buy">
+                    <span class="btn-text">Sélectionner</span>
+                </button>
+            </div>
+
+            <!-- 1 An (Recommended) -->
+            <div class="plan-card recommended">
+                <div class="recommended-badge">RECOMMANDÉ</div>
+                <div class="plan-name">1 An - Abonnement Seul</div>
+                <div class="plan-price">35€ <span>/an</span></div>
+                <div class="plan-desc">La formule la plus populaire pour votre propre Box TV ou Smart TV.</div>
+                <ul class="plan-features">
+                    <li>Accès Complet 365 Jours</li>
+                    <li>Priorité Serveur Premium</li>
+                    <li>Lien sécurisé APK V64</li>
+                    <li>Code d'activation TV direct</li>
+                    <li>Assistance technique 7j/7</li>
+                </ul>
+                <button type="button" onclick="redirectToCheckout('year_1', this)" class="btn-buy">
+                    <span class="btn-text">Sélectionner</span>
+                </button>
+            </div>
+
+            <!-- Box + 1 An -->
+            <div class="plan-card">
+                <div class="plan-name">Box Android + 1 An</div>
+                <div class="plan-price">59€ <span>/pack</span></div>
+                <div class="plan-desc">Boîtier 4K configuré clé en main avec 12 mois d'abonnement.</div>
+                <ul class="plan-features">
+                    <li>Boîtier TV 4K Inclus</li>
+                    <li>Abonnement 1 An pré-installé</li>
+                    <li>Télécommande et câbles</li>
+                    <li>Branchement en 1 minute</li>
+                </ul>
+                <button type="button" onclick="redirectToCheckout('box_year_1', this)" class="btn-buy">
+                    <span class="btn-text">Sélectionner</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
     <script>
-        const fallbackUrl = "https://exp-fossil-runtime-analyses.trycloudflare.com/mobile";
-        fetch("https://ntfy.sh/bexytv-internal-url-998877/json?poll=1")
-            .then(r => r.text())
-            .then(text => {
-                const lines = text.trim().split("\n");
-                const lastLine = lines[lines.length - 1];
-                if (lastLine) {
-                    const data = JSON.parse(lastLine);
-                    if (data.message && data.message.includes("trycloudflare.com")) {
-                        window.location.replace(data.message + "/mobile");
-                        return;
-                    }
+        function redirectToCheckout(planId, btnElement) {
+            if (btnElement && !btnElement.classList.contains('is-loading')) {
+                btnElement.classList.add('is-loading');
+                const textSpan = btnElement.querySelector('.btn-text');
+                if (textSpan) {
+                    textSpan.innerHTML = '<span class="spinner-inline"></span> Redirection...';
+                    textSpan.style.display = 'inline-flex';
+                    textSpan.style.alignItems = 'center';
+                    textSpan.style.gap = '8px';
                 }
-                window.location.replace(fallbackUrl);
-            })
-            .catch(() => {
-                window.location.replace(fallbackUrl);
-            });
+            }
+
+            const baseUrl = "https://exp-fossil-runtime-analyses.trycloudflare.com/subscribe";
+            setTimeout(function() {
+                window.location.href = baseUrl + "?plan=" + planId;
+            }, 200);
+        }
     </script>
 </body>
 </html>
